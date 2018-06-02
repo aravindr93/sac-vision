@@ -1,5 +1,6 @@
 """ Rllab implementation with a HACK. See comment in GymEnv.__init__(). """
 import gym
+import transferHMS.envs
 import gym.wrappers
 import gym.envs
 import gym.spaces

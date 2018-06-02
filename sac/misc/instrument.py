@@ -1,5 +1,6 @@
 import os
 import uuid
+import transferHMS.envs
 
 from rllab.misc.instrument import run_experiment_lite
 from sac.misc.utils import timestamp
