@@ -1,5 +1,5 @@
 import argparse
-
+import transferHMS.envs
 import joblib
 import tensorflow as tf
 
@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument('file', type=str, help='Path to the snapshot file.')
-    parser.add_argument('--max-path-length', '-l', type=int, default=1000)
+    parser.add_argument('--max-path-length', '-l', type=int, default=None)
     parser.add_argument('--speedup', '-s', type=float, default=1)
     parser.add_argument('--deterministic', '-d', dest='deterministic',
                         action='store_true')
@@ -28,8 +28,17 @@ if __name__ == "__main__":
             policy = data['policy']
             env = data['env']
 
+        args.max_path_length = env.horizon if args.max_path_length is None else args.max_path_length
+
         with policy.deterministic(args.deterministic):
+            env.wrapped_env.env.mujoco_render_frames = True
             while True:
-                path = rollout(env, policy,
-                               max_path_length=args.max_path_length,
-                               animated=True, speedup=args.speedup)
+                print("Starting new rollout")
+                obs = env.reset()
+                t = 0
+                done = False
+                while t < args.max_path_length and done is False:
+                    env.wrapped_env.env.mj_render()
+                    a = policy.get_action(obs)[0]
+                    obs, r, done, ifo = env.step(a)
+                    t = t + 1
