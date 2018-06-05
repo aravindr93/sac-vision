@@ -25,7 +25,7 @@ SHARED_PARAMS = {
     "n_train_repeat": 1,
     #"epoch_length": 1000,
     "snapshot_mode": 'gap',
-    "snapshot_gap": 100,
+    "snapshot_gap": 5,
     "sync_pkl": True,
 }
 
@@ -35,7 +35,7 @@ ENV_PARAMS = {
         'env_name': 'allegro_pose-v0',
         'max_path_length': 200,
         'n_epochs': 250,
-        'scale_reward': 2.0,
+        #'scale_reward': 2.0,
         'epoch_length': 400,
     },
 
@@ -43,9 +43,9 @@ ENV_PARAMS = {
         'prefix': 'dclaw_pose',
         'env_name': 'dclaw_pose-v0',
         'max_path_length': 200,
-        'n_epochs': 25,
-        'scale_reward': 2.0,
-        'epoch_length': 400,
+        'n_epochs': 50,
+        #'scale_reward': 2.0,
+        'epoch_length': 200,
     },
 
     'dclaw_track': {
@@ -53,7 +53,16 @@ ENV_PARAMS = {
         'env_name': 'dclaw_track-v1',
         'max_path_length': 200,
         'n_epochs': 50,
-        'scale_reward': 2.0,
+        #'scale_reward': 2.0,
+        'epoch_length': 400,
+    },
+
+    'allegro_screw': {
+        'prefix': 'allegro_screw',
+        'env_name': 'allegro_screw-v21',
+        'max_path_length': 400,
+        'n_epochs': 500,
+        #'scale_reward': 1.0,
         'epoch_length': 400,
     },
 }
@@ -71,8 +80,9 @@ def parse_args():
     parser.add_argument('--mode', type=str, default='local')
     parser.add_argument('--log_dir', type=str, default=None)
     parser.add_argument('--seed', type=int, default=0)
-    parser.add_argument('--scale_reward', default=None)
+    parser.add_argument('--scale_reward', type=float, default=1.0)
     args = parser.parse_args()
+    print("reward scale = %f " % args.scale_reward)
     return args
 
 
